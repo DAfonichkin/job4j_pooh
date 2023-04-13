@@ -1,5 +1,7 @@
 package ru.job4j.pooh;
 
+import java.util.Scanner;
+
 public class Req {
 
     private final String httpRequestType;
@@ -15,8 +17,21 @@ public class Req {
     }
 
     public static Req of(String content) {
-        /* TODO parse a content */
-        return new Req(null, null, null, null);
+        Scanner sc = new Scanner(content).useDelimiter(System.lineSeparator());
+        String header = sc.next();
+        String[] paramsArray = header.split("/");
+        String httpReqType = paramsArray[0].trim();
+        String poohMode = paramsArray[1];
+        String sourceName = paramsArray[2].replaceAll(" HTTP", "");
+        String param = "";
+        if (paramsArray.length == 5) {
+            param = paramsArray[3].replaceAll(" HTTP", "");
+        } else {
+            while (sc.hasNext()) {
+                param = sc.next();
+            }
+        }
+        return new Req(httpReqType, poohMode, sourceName, param);
     }
 
     public String httpRequestType() {
