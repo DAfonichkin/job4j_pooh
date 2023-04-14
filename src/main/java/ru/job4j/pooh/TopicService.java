@@ -12,9 +12,7 @@ public class TopicService implements Service {
     public Resp process(Req req) {
         String src = req.getSourceName();
         if ("POST".equals(req.httpRequestType())) {
-            for (ConcurrentLinkedQueue<String> clientQueue : queue.get(src).values()) {
-                clientQueue.offer(req.getParam());
-            }
+            queue.get(src).values().forEach(clientQueue -> clientQueue.offer(req.getParam()));
             return new Resp("", "200");
         }
         if ("GET".equals(req.httpRequestType())) {
